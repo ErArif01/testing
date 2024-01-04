@@ -23,14 +23,19 @@ jobs:
   deploy_staging:
     runs-on: ubuntu-latest
 
-    needs: test
+  test:
+    runs-on: ubuntu-latest
+
+    needs: build
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Deploy to Staging
-        run: eb deploy staging
+      - name: Run Tests
+        run: |
+          pytest path/to/test_example.py
+        
 
   deploy_production:
     runs-on: ubuntu-latest

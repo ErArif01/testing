@@ -41,8 +41,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy to Staging
-        run: |
-          eb deploy staging
+        run: eb deploy staging
 
   deploy_production:
     runs-on: ubuntu-latest
@@ -54,5 +53,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy to Production
-        run: |
-          eb deploy production
+        run: eb deploy production

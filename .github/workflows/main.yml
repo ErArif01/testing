@@ -1,0 +1,58 @@
+name: Multistage Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+        
+      - name: Build Application
+        run: python setup.py build
+
+  test:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run Tests
+        run: |
+          pytest test.py
+
+  deploy_staging:
+    runs-on: ubuntu-latest
+
+    needs: test
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to Staging
+        run: |
+          eb deploy staging
+
+  deploy_production:
+    runs-on: ubuntu-latest
+
+    needs: test
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to Production
+        run: |
+          eb deploy production
